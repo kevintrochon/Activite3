@@ -1,37 +1,49 @@
-package nc.unc.kevin.trochon;
+package nc.unc.kevintrochon;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
 
 public class GrilleParser {
-  public static void parse(InputStream in, GrilleImpl grille) throws IOException {
-    Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
-    int dimension = grille.getDimension();
-    char[] buffer = new char[dimension];
-    for (int line = 0; line < dimension; line++) {
-      int lus = reader.read(buffer);
-      if (lus != dimension) {
-        throw new EOFException("format incorrect");
+  /**
+   * Rempli une grille à partir d'un fichier txt.
+   * @param in path du fichier.
+   * @param grille Grille à remplir
+   * @throws IOException
+   *          Erreur si le fichier n'existe pas.
+   */
+  public static void parse(String in, GrilleImpl grille) throws IOException {
+    try
+    {
+      // Le fichier d'entrée
+      File file = new File(in);
+      // Créer l'objet File Reader
+      FileReader fr = new FileReader(file);
+      // Créer l'objet BufferedReader
+      BufferedReader br = new BufferedReader(fr);
+      StringBuffer sb = new StringBuffer();
+      String line;
+      while((line = br.readLine()) != null)
+      {
+        // ajoute la ligne au buffer
+        sb.append(line);
       }
-      for (int i = 0; i < dimension; i++) {
-          grille.initialisation(line, i, buffer[i]);
-      }
-      lus = reader.read(new char[1]);
-      if (lus != 1) {
-        throw new EOFException("pas de fin de ligne ? ligne=" + line);
-      }
+      sb.append("\n");
+      fr.close();
+      int j=0;
+        for (int k = 0; k < grille.getDimension(); k++) {
+          for (int l = 0; l < grille.getDimension(); l++) {
+            grille.initialisation(k,l,sb.charAt(j++));
+          }
+        }
     }
-    reader.close();
+    catch(IOException e)
+    {
+      e.printStackTrace();
+    }
   }
 
-  public static void parse(File f, GrilleImpl grille) throws IOException {
-    parse(new FileInputStream(f), grille);
+
+  public static void parseur(String f, GrilleImpl grille) throws IOException {
+    parse(f, grille);
   }
 
 }

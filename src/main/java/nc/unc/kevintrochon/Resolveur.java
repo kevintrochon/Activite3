@@ -1,42 +1,62 @@
-package nc.unc.kevin.trochon;
+package nc.unc.kevintrochon;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Resolveur {
-  GrilleImpl grille;
+/**
+ * Class de résolution de sudoku.
+ */
+public class Resolveur implements ResolveurInterface {
+  /**
+   * Grille à complèter.
+   */
+  protected GrilleImpl grille;
+  /**
+   * Liste de caratère permis.
+   */
+  protected List<Character> charsPossible = new ArrayList<>();
 
-  public Resolveur() {
-    this.grille = new GrilleImpl("src/main/src/sudoku-9x9.txt");
-    try {
-      GrilleParser.parse(new File("src/main/src/sudoku-9x9.txt"), this.grille);
-    }catch (IOException exception){
-      exception.getMessage();
+
+  /**
+   * Constructeur à partir d'un fichier.
+   */
+  public Resolveur(final String file)throws IOException {
+    grille = new GrilleImpl(file);
+    for (final char c : grille.getTableauPossible()
+         ) {
+      charsPossible.add(c);
     }
+    GrilleParser.parseur(file, this.grille);
   }
 
-  public void afficheGrille(){
-    for (int i = 0; i < this.grille.getDimension(); i++) {
-      for (int j = 0; j < grille.getDimension(); j++) {
-        try{
-          System.out.print(this.grille.getValue(i,j));
-        }catch (HorsBornesException horsBornesException){
-          horsBornesException.getMessage();
+  /**
+   * Résolution de grille de sudoku.
+   */
+  @Override
+  public boolean solveur(int position) {
+    try {
+      if (position == grille.getDimension() * grille.getDimension()) {
+        return true;
+      }
+      int ligne = position / grille.getDimension();
+      int colonne = position % grille.getDimension();
+      if (grille.getValue(ligne, colonne) != GrilleImpl.EMPTY) {
+        return solveur(position + 1);
+      }
+      for (final char c : charsPossible) {
+        if (grille.verifLigne(ligne, c) && grille.verifColonne(colonne, c)
+            && grille.verifRegion(ligne, colonne, c)) {
+          grille.initialisation(ligne, colonne, c);
+          if (solveur(position + 1)) {
+            return true;
+          }
         }
       }
+      grille.initialisation(ligne, colonne, GrilleImpl.EMPTY);
+      return false;
+    } catch (HorsBornesException | CaractereInterditException exception) {
+      return false;
     }
-  }
-
-  public void afficheValue(int i,int j){
-    try{
-      System.out.print(this.grille.getValue(i,j));
-    }catch (HorsBornesException horsBornesException){
-      horsBornesException.getMessage();
-    }
-  }
-
-  public static void main(String[] args) {
-    Resolveur resolveur = new Resolveur();
-    resolveur.afficheGrille();
   }
 }

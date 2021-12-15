@@ -1,4 +1,4 @@
-package nc.unc.kevin.trochon;
+package nc.unc.kevintrochon;
 
 /**
  * Leve une exception

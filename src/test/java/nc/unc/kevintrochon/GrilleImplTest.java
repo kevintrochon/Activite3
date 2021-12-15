@@ -1,4 +1,4 @@
-package nc.unc.kevin.trochon;
+package nc.unc.kevintrochon;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

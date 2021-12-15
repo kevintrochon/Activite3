@@ -1,4 +1,4 @@
-package nc.unc.kevin.trochon;
+package nc.unc.kevintrochon;
 
 /**
  * Interface pour la contruction d'une grille.

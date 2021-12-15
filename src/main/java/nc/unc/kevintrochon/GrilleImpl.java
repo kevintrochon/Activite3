@@ -1,4 +1,4 @@
-package nc.unc.kevin.trochon;
+package nc.unc.kevintrochon;
 
 /**
  * Création d'une grille de Sudoku.
@@ -29,7 +29,7 @@ public class GrilleImpl implements Grille {
    */
   private final int dimension;
   /** Caractere de case vide. */
-  private static final char EMPTY = '@';
+  public static final char EMPTY = '@';
   /**
    * Caractere possible a mettre dans la grille.
    * pour une grille 4x4 : 1..4
@@ -129,6 +129,44 @@ public class GrilleImpl implements Grille {
     }
   }
 
+  public int getLongueurPossible(){
+    return this.caracterePossible.length;
+  }
+
+  public char[] getTableauPossible() {
+    return caracterePossible;
+  }
+
+  /**
+   * Récupère un caractère parmis les caractères possible.
+   * @param index indice du tableau.
+   * @return le caractère à l'indice choisie.
+   */
+  public char getCaracterePossible(int index) {
+    if (index > getLongueurPossible()){
+      return caracterePossible[getLongueurPossible()-1];
+    }
+    return caracterePossible[index];
+  }
+
+  /**
+   * Récupère l'indice du tableau du caractère choisi.
+   * @param caractere caratère pour retrouver son indice.
+   * @return indice l'indice du tableau.
+   */
+  public int indiceCaraterePossible(char caractere){
+    int indice = 0;
+    for (char permis:this.caracterePossible
+         ) {
+      if (permis == caractere){
+        break;
+      }else {
+        indice ++;
+      }
+    }
+    return indice;
+  }
+
   /**
    * Vérification que la valeur saisie soit permise
    * selon la taille de la grille.
@@ -151,13 +189,13 @@ public class GrilleImpl implements Grille {
     final int tailleRegion = (int) Math.sqrt((double) this.getDimension());
     int pointZeroLigne = 0;
     if (ligne >= tailleRegion && ligne < 2 * tailleRegion) {
-      pointZeroLigne = tailleRegion + 1;
+      pointZeroLigne = tailleRegion+1;
     } else if (ligne >= 2 * tailleRegion && ligne < 3 * tailleRegion) {
-      pointZeroLigne = 2 * tailleRegion + 1;
+      pointZeroLigne = 2 * tailleRegion+1;
     } else if (ligne >= 3 * tailleRegion && ligne < 4 * tailleRegion) {
-      pointZeroLigne = 3 * tailleRegion + 1;
+      pointZeroLigne = 3 * tailleRegion+1;
     } else if (ligne >= 4 * tailleRegion && ligne < 5 * tailleRegion) {
-      pointZeroLigne = 4 * tailleRegion + 1;
+      pointZeroLigne = 4 * tailleRegion+1;
     }
     return pointZeroLigne;
   }
@@ -182,8 +220,8 @@ public class GrilleImpl implements Grille {
     final int tailleRegion = (int) Math.sqrt((double) this.getDimension());
     final int pointZeroLigne = remisePointZeroRegion(ligne);
     final int pointZeroColonne =  remisePointZeroRegion(colonne);
-    for (int i = pointZeroLigne; i < tailleRegion + pointZeroLigne - 1; i++) {
-      for (int j = pointZeroColonne; j < tailleRegion + pointZeroColonne - 1; j++) {
+    for (int i = pointZeroLigne; i < tailleRegion + pointZeroLigne-1; i++) {
+      for (int j = pointZeroColonne; j < tailleRegion + pointZeroColonne-1; j++) {
         if (grille[i][j] == value) {
           isPermis = false;
           break;
@@ -267,10 +305,9 @@ public class GrilleImpl implements Grille {
     } else if (!this.possible(ligne, colonne, value)) {
       throw new ValeurImpossibleException("La valeur : " + value
           + " est déjà présente dans la ligne ou la colonne ou dans la region");
-    } else {
-      if (this.getValue(ligne, colonne) == EMPTY) {
-        grille[ligne][colonne] = value;
-      }
+    }
+    if (this.getValue(ligne, colonne) == EMPTY) {
+      grille[ligne][colonne] = value;
     }
   }
 
@@ -301,7 +338,7 @@ public class GrilleImpl implements Grille {
       for (int i = 0; i < grille.length; i++) {
         for (int j = 0; j < grille[i].length; j++) {
           if (verifRegion(i, j, grille[i][j]) && verifColonne(i, grille[i][j])
-              && verifLigne(j, grille[i][j]) && grille[i][j] != EMPTY) {
+              && verifLigne(j, grille[i][j]) && grille[i][j] == EMPTY) {
             isComplete = false;
             break;
           }
@@ -339,7 +376,12 @@ public class GrilleImpl implements Grille {
     return isPossible;
   }
 
-
+  /**
+   * Remplis la grille.
+   * @param ligne numéro de ligne.
+   * @param colonne numéro de colonne.
+   * @param value valeur a incérer.
+   */
   public void initialisation(final int ligne, final int colonne, final char value) {
         grille[ligne][colonne] = value;
   }
