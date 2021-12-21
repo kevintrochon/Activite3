@@ -8,6 +8,7 @@ import java.util.List;
  * Class de résolution de sudoku.
  */
 public class Resolveur implements ResolveurInterface {
+
   /**
    * Grille à complèter.
    */
@@ -16,7 +17,6 @@ public class Resolveur implements ResolveurInterface {
    * Liste de caratère permis.
    */
   protected List<Character> charsPossible = new ArrayList<>();
-
 
   /**
    * Constructeur à partir d'un fichier.
@@ -34,13 +34,13 @@ public class Resolveur implements ResolveurInterface {
    * Résolution de grille de sudoku.
    */
   @Override
-  public boolean solveur(int position) {
+  public boolean solveur(final int position) {
     try {
       if (position == grille.getDimension() * grille.getDimension()) {
         return true;
       }
-      int ligne = position / grille.getDimension();
-      int colonne = position % grille.getDimension();
+      final int ligne = position / grille.getDimension();
+      final int colonne = position % grille.getDimension();
       if (grille.getValue(ligne, colonne) != GrilleImpl.EMPTY) {
         return solveur(position + 1);
       }

@@ -31,6 +31,10 @@ public class GrilleImplTest {
     GrilleImpl grandeGrille = new GrilleImpl(16);
     GrilleImpl geanteGrille = new GrilleImpl(25);
     GrilleImpl defaultGrille = new GrilleImpl(15);
+    GrilleImpl grilleFichier9 = new GrilleImpl("src/main/ressources/sudoku-9x9.txt");
+    GrilleImpl grilleFichier16 = new GrilleImpl("src/main/ressources/sudoku-16x16.txt");
+    GrilleImpl grilleFichier25 = new GrilleImpl("src/main/ressources/sudoku-25x25.txt");
+    GrilleImpl grilleFichier20 = new GrilleImpl("src/main/ressources/sudoku-20x20.txt");
   }
 
   @Test
