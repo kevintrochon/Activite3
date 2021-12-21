@@ -217,7 +217,7 @@ public class GrilleImplTest {
     GrilleImpl grandeGrille = new GrilleImpl(25);
     Assertions.assertEquals(11, grandeGrille.remisePointZeroRegion(11));
     Assertions.assertEquals(16, grandeGrille.remisePointZeroRegion(16));
-    Assertions.assertEquals(21, grandeGrille.remisePointZeroRegion(22));
+    Assertions.assertEquals(21, grandeGrille.remisePointZeroRegion(24));
   }
 
   @Test

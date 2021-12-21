@@ -317,20 +317,14 @@ public class GrilleImpl implements Grille {
   @Override
   public boolean complete() {
     boolean isComplete = true;
-    try {
       for (int i = 0; i < grille.length; i++) {
         for (int j = 0; j < grille[i].length; j++) {
-          if (grille[i][j] == EMPTY && verifRegion(i, j, grille[i][j])
-                  && verifColonne(i, grille[i][j])
-              && verifLigne(j, grille[i][j])) {
+          if (grille[i][j] == EMPTY) {
             isComplete = false;
             break;
           }
         }
       }
-    } catch (HorsBornesException | CaractereInterditException horsBornes) {
-      isComplete = false;
-    }
     return isComplete;
   }
 
@@ -345,8 +339,7 @@ public class GrilleImpl implements Grille {
       throw new HorsBornesException(this.DEBUTMESSAGEERROR + ligne
           + this.FINMESSAGEERROR);
     } else if (colonne < 0 || colonne > this.getDimension()) {
-      throw new HorsBornesException(this.DEBUTMESSAGEERROR + colonne
-          + this.FINMESSAGEERROR);
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + colonne + this.FINMESSAGEERROR);
     } else if (!isCaracterPermis(value)) {
       throw new CaractereInterditException(this.DEBUTMESSAGEERRORCHAR + value
           + this.FINMESSAGEERRORCHAR);
