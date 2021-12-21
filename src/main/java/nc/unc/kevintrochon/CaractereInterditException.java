@@ -5,7 +5,10 @@ package nc.unc.kevintrochon;
  * si le caractère renseigné est différent des valeurs permises.
  */
 public class CaractereInterditException extends Exception {
-  public CaractereInterditException(String message) {
+  /**
+   * Création du message d'erreur personnaliser.
+   */
+  public CaractereInterditException(final String message) {
     super(message);
   }
 }
