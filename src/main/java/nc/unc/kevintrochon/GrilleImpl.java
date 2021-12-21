@@ -5,6 +5,22 @@ package nc.unc.kevintrochon;
  */
 public class GrilleImpl implements Grille {
   /**
+   * Debut du message d'erreur du cas HorsBornesException.
+   */
+  private static final String DEBUTMESSAGEERROR = "La coordonnées : ";
+  /**
+   * Fin du message d'erreur du cas HorsBornesException.
+   */
+  private static final String FINMESSAGEERROR = " n'est pas correcte, elle est hors grille";
+  /**
+   * Début du message pour l'exception CaratereInterditException.
+   */
+  private static final String DEBUTMESSAGEERRORCHAR = "Le caractère : ";
+  /**
+   * Début du message pour l'exception CaratereInterditException.
+   */
+  private static final String FINMESSAGEERRORCHAR = " que vous avez renseignée n'est pas permise.";
+  /**
    * taille de grille 4 x 4.
    */
   private static final int PETITE = 4;
@@ -104,21 +120,19 @@ public class GrilleImpl implements Grille {
 
   /**
    * Constructeur à partir d'un fichier.
-   * @param fichier chemin du fichier.
    */
-  public GrilleImpl(String fichier){
-    String tailleGrille = fichier.split("/")[3].split("-")[1].split("\\.")[0].split("x")[0];
+  public GrilleImpl(final String fichier) {
+    final String tailleGrille = fichier.split("/")[3].split("-")[1].split("\\.")[0].split("x")[0];
     this.grille = new char[Integer.parseInt(tailleGrille)][Integer.parseInt(tailleGrille)];
     this.dimension = Integer.parseInt(tailleGrille);
-    switch (Integer.parseInt(tailleGrille)){
-      case 9 : this.caracterePossible = new char[]{
-                  '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    switch (Integer.parseInt(tailleGrille)) {
+      case 9:this.caracterePossible = new char[]{'1', '2', '3', '4', '5', '6', '7', '8', '9'};
                 break;
-      case 16 : this.caracterePossible = new char[]{
+      case 16:this.caracterePossible = new char[]{
           '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
           'a', 'b', 'c', 'd', 'e', 'f'};
       break;
-      case 25 : this.caracterePossible = new char[]{
+      case 25:this.caracterePossible = new char[]{
           '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
           'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
           'k', 'l', 'm', 'n', 'o'};
@@ -129,42 +143,11 @@ public class GrilleImpl implements Grille {
     }
   }
 
-  public int getLongueurPossible(){
-    return this.caracterePossible.length;
-  }
-
+  /**
+   * Retourne le tableau des caractères possibles.
+   */
   public char[] getTableauPossible() {
-    return caracterePossible;
-  }
-
-  /**
-   * Récupère un caractère parmis les caractères possible.
-   * @param index indice du tableau.
-   * @return le caractère à l'indice choisie.
-   */
-  public char getCaracterePossible(int index) {
-    if (index > getLongueurPossible()){
-      return caracterePossible[getLongueurPossible()-1];
-    }
-    return caracterePossible[index];
-  }
-
-  /**
-   * Récupère l'indice du tableau du caractère choisi.
-   * @param caractere caratère pour retrouver son indice.
-   * @return indice l'indice du tableau.
-   */
-  public int indiceCaraterePossible(char caractere){
-    int indice = 0;
-    for (char permis:this.caracterePossible
-         ) {
-      if (permis == caractere){
-        break;
-      }else {
-        indice ++;
-      }
-    }
-    return indice;
+    return this.caracterePossible;
   }
 
   /**
@@ -189,13 +172,13 @@ public class GrilleImpl implements Grille {
     final int tailleRegion = (int) Math.sqrt((double) this.getDimension());
     int pointZeroLigne = 0;
     if (ligne >= tailleRegion && ligne < 2 * tailleRegion) {
-      pointZeroLigne = tailleRegion+1;
+      pointZeroLigne = tailleRegion + 1;
     } else if (ligne >= 2 * tailleRegion && ligne < 3 * tailleRegion) {
-      pointZeroLigne = 2 * tailleRegion+1;
+      pointZeroLigne = 2 * tailleRegion + 1;
     } else if (ligne >= 3 * tailleRegion && ligne < 4 * tailleRegion) {
-      pointZeroLigne = 3 * tailleRegion+1;
+      pointZeroLigne = 3 * tailleRegion + 1;
     } else if (ligne >= 4 * tailleRegion && ligne < 5 * tailleRegion) {
-      pointZeroLigne = 4 * tailleRegion+1;
+      pointZeroLigne = 4 * tailleRegion + 1;
     }
     return pointZeroLigne;
   }
@@ -207,21 +190,21 @@ public class GrilleImpl implements Grille {
   public boolean verifRegion(final int ligne, final int colonne, final char value)
       throws HorsBornesException, CaractereInterditException {
     if (ligne < 0 || ligne >= this.getDimension()) {
-      throw new HorsBornesException("La coordonnées : " + ligne
-          + " n'est pas correcte, elle est hors grille");
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + ligne
+          + this.FINMESSAGEERROR);
     } else if (colonne < 0 || colonne >= this.getDimension()) {
-      throw new HorsBornesException("La coordonnées : " + colonne
-          + " n'est pas correcte, elle est hors grille");
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + colonne
+          + this.FINMESSAGEERROR);
     } else if (!isCaracterPermis(value)) {
-      throw new CaractereInterditException("Le caractère : " + value
-          + " que vous avez renseignée n'est pas permise.");
+      throw new CaractereInterditException(this.DEBUTMESSAGEERRORCHAR + value
+          + this.FINMESSAGEERRORCHAR);
     }
     boolean isPermis = true;
     final int tailleRegion = (int) Math.sqrt((double) this.getDimension());
     final int pointZeroLigne = remisePointZeroRegion(ligne);
     final int pointZeroColonne =  remisePointZeroRegion(colonne);
-    for (int i = pointZeroLigne; i < tailleRegion + pointZeroLigne-1; i++) {
-      for (int j = pointZeroColonne; j < tailleRegion + pointZeroColonne-1; j++) {
+    for (int i = pointZeroLigne; i < tailleRegion + pointZeroLigne - 1; i++) {
+      for (int j = pointZeroColonne; j < tailleRegion + pointZeroColonne - 1; j++) {
         if (grille[i][j] == value) {
           isPermis = false;
           break;
@@ -238,11 +221,11 @@ public class GrilleImpl implements Grille {
   public boolean verifLigne(final int ligne, final char value)
       throws HorsBornesException, CaractereInterditException {
     if (ligne < 0 || ligne > this.getDimension()) {
-      throw new HorsBornesException("La coordonnées : " + ligne
-          + " n'est pas correcte, elle est hors grille");
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + ligne
+          + this.FINMESSAGEERROR);
     } else if (!isCaracterPermis(value)) {
-      throw new CaractereInterditException("Le caractère : " + value
-          + " que vous avez renseignée n'est pas permise.");
+      throw new CaractereInterditException(this.DEBUTMESSAGEERRORCHAR + value
+          + this.FINMESSAGEERRORCHAR);
     }
     boolean isPermis = true;
     for (int i = 0; i < grille[ligne].length; i++) {
@@ -260,11 +243,11 @@ public class GrilleImpl implements Grille {
   public boolean verifColonne(final int colonne, final char value)
       throws HorsBornesException, CaractereInterditException {
     if (colonne < 0 || colonne > this.getDimension()) {
-      throw new HorsBornesException("La coordonnées : " + colonne
-          + " n'est pas correcte, elle est hors grille");
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + colonne
+          + this.FINMESSAGEERROR);
     } else if (!isCaracterPermis(value)) {
-      throw new CaractereInterditException("Le caractère : " + value
-          + " que vous avez renseignée n'est pas permise.");
+      throw new CaractereInterditException(this.DEBUTMESSAGEERRORCHAR + value
+          + this.FINMESSAGEERRORCHAR);
     }
     boolean isPermis = true;
     for (final char[] chars : grille) {
@@ -294,14 +277,14 @@ public class GrilleImpl implements Grille {
   public void setValue(final int ligne, final int colonne, final char value)
       throws HorsBornesException, ValeurImpossibleException, CaractereInterditException {
     if (ligne < 0 || ligne > this.getDimension()) {
-      throw new HorsBornesException("La coordonnées : " + ligne
-          + " n'est pas correcte, elle est hors grille");
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + ligne
+          + this.FINMESSAGEERROR);
     } else if (colonne < 0 || colonne > this.getDimension()) {
-      throw new HorsBornesException("La coordonnées : " + colonne
-          + " n'est pas correcte, elle est hors grille");
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + colonne
+          + this.FINMESSAGEERROR);
     } else if (!isCaracterPermis(value)) {
-      throw new CaractereInterditException("Le caractère : " + value
-          + " que vous avez renseignée n'est pas permise.");
+      throw new CaractereInterditException(this.DEBUTMESSAGEERRORCHAR + value
+          + this.FINMESSAGEERRORCHAR);
     } else if (!this.possible(ligne, colonne, value)) {
       throw new ValeurImpossibleException("La valeur : " + value
           + " est déjà présente dans la ligne ou la colonne ou dans la region");
@@ -317,11 +300,11 @@ public class GrilleImpl implements Grille {
   @Override
   public char getValue(final int ligne, final int colonne) throws HorsBornesException {
     if (ligne > this.getDimension() || ligne < 0) {
-      throw new HorsBornesException("La coordonnées : " + ligne
-          + " n'est pas correcte, elle est hors grille");
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + ligne
+          + this.FINMESSAGEERROR);
     } else if (colonne < 0 || colonne > this.getDimension()) {
-      throw new HorsBornesException("La coordonnées : " + colonne
-          + " n'est pas correcte, elle est hors grille");
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + colonne
+          + this.FINMESSAGEERROR);
     }
     return grille[ligne][colonne];
   }
@@ -337,7 +320,8 @@ public class GrilleImpl implements Grille {
     try {
       for (int i = 0; i < grille.length; i++) {
         for (int j = 0; j < grille[i].length; j++) {
-          if (grille[i][j] == EMPTY && verifRegion(i, j, grille[i][j]) && verifColonne(i, grille[i][j])
+          if (grille[i][j] == EMPTY && verifRegion(i, j, grille[i][j])
+                  && verifColonne(i, grille[i][j])
               && verifLigne(j, grille[i][j])) {
             isComplete = false;
             break;
@@ -358,14 +342,14 @@ public class GrilleImpl implements Grille {
       throws HorsBornesException, CaractereInterditException {
     boolean isPossible = true;
     if (ligne < 0 || ligne > this.getDimension()) {
-      throw new HorsBornesException("La coordonnées : " + ligne
-          + " n'est pas correcte, elle est hors grille");
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + ligne
+          + this.FINMESSAGEERROR);
     } else if (colonne < 0 || colonne > this.getDimension()) {
-      throw new HorsBornesException("La coordonnées : " + colonne
-          + " n'est pas correcte, elle est hors grille");
+      throw new HorsBornesException(this.DEBUTMESSAGEERROR + colonne
+          + this.FINMESSAGEERROR);
     } else if (!isCaracterPermis(value)) {
-      throw new CaractereInterditException("Le caractère : " + value
-          + " que vous avez renseignée n'est pas permise.");
+      throw new CaractereInterditException(this.DEBUTMESSAGEERRORCHAR + value
+          + this.FINMESSAGEERRORCHAR);
     } else if (!verifRegion(ligne, colonne, value)) {
       isPossible = false;
     } else if (!verifColonne(colonne, value)) {
@@ -378,12 +362,9 @@ public class GrilleImpl implements Grille {
 
   /**
    * Remplis la grille.
-   * @param ligne numéro de ligne.
-   * @param colonne numéro de colonne.
-   * @param value valeur a incérer.
    */
   public void initialisation(final int ligne, final int colonne, final char value) {
-        grille[ligne][colonne] = value;
+    grille[ligne][colonne] = value;
   }
 
 }

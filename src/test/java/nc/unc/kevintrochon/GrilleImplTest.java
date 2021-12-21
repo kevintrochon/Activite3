@@ -221,26 +221,6 @@ public class GrilleImplTest {
   }
 
   @Test
-  public void getLongueurPossibleTest(){
-    GrilleImpl grille = new GrilleImpl(9);
-    Assertions.assertEquals(9,grille.getLongueurPossible());
-  }
-
-  @Test
-  public void getCaraterPossibleTest(){
-    GrilleImpl grille = new GrilleImpl(9);
-    Assertions.assertEquals('1',grille.getCaracterePossible(0));
-    Assertions.assertEquals('9',grille.getCaracterePossible(10));
-  }
-
-  @Test
-  public void getIndiceCaraterePossibleTest(){
-    GrilleImpl grille = new GrilleImpl(9);
-    Assertions.assertEquals(0,grille.indiceCaraterePossible('1'));
-    Assertions.assertEquals(8,grille.indiceCaraterePossible('9'));
-  }
-
-  @Test
   public void getTableauPossibleTest(){
     GrilleImpl grille = new GrilleImpl(9);
     char[] test = grille.getTableauPossible();
