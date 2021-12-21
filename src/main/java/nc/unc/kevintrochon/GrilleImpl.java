@@ -337,8 +337,8 @@ public class GrilleImpl implements Grille {
     try {
       for (int i = 0; i < grille.length; i++) {
         for (int j = 0; j < grille[i].length; j++) {
-          if (verifRegion(i, j, grille[i][j]) && verifColonne(i, grille[i][j])
-              && verifLigne(j, grille[i][j]) && grille[i][j] == EMPTY) {
+          if (grille[i][j] == EMPTY && verifRegion(i, j, grille[i][j]) && verifColonne(i, grille[i][j])
+              && verifLigne(j, grille[i][j])) {
             isComplete = false;
             break;
           }

@@ -11,6 +11,7 @@ public class TestResolveur {
     try {
       Resolveur resolveur = new Resolveur("src/main/ressources/sudoku-9x9.txt");
       Assertions.assertTrue(resolveur.solveur(0));
+      Assertions.assertFalse(resolveur.solveur(-1));
       Resolveur resolveur1 = new Resolveur("src/main/ressources/sudoku-16x16.txt");
       Resolveur resolveur2 = new Resolveur("src/main/ressources/sudoku-25x25.txt");
     } catch (IOException ioException){

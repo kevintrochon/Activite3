@@ -3,6 +3,8 @@ package nc.unc.kevintrochon;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public class GrilleImplTest {
 
   @Test
@@ -63,6 +65,7 @@ public class GrilleImplTest {
 
   @Test
   public void getValueTest() throws HorsBornesException {
+    String error;
     GrilleImpl grille = new GrilleImpl(9);
     Assertions.assertEquals('@',grille.getValue(0,0));
     Assertions.assertThrows(HorsBornesException.class,()->{grille.possible(-1,0,'2');});
@@ -215,5 +218,42 @@ public class GrilleImplTest {
     Assertions.assertEquals(11, grandeGrille.remisePointZeroRegion(11));
     Assertions.assertEquals(16, grandeGrille.remisePointZeroRegion(16));
     Assertions.assertEquals(21, grandeGrille.remisePointZeroRegion(22));
+  }
+
+  @Test
+  public void getLongueurPossibleTest(){
+    GrilleImpl grille = new GrilleImpl(9);
+    Assertions.assertEquals(9,grille.getLongueurPossible());
+  }
+
+  @Test
+  public void getCaraterPossibleTest(){
+    GrilleImpl grille = new GrilleImpl(9);
+    Assertions.assertEquals('1',grille.getCaracterePossible(0));
+    Assertions.assertEquals('9',grille.getCaracterePossible(10));
+  }
+
+  @Test
+  public void getIndiceCaraterePossibleTest(){
+    GrilleImpl grille = new GrilleImpl(9);
+    Assertions.assertEquals(0,grille.indiceCaraterePossible('1'));
+    Assertions.assertEquals(8,grille.indiceCaraterePossible('9'));
+  }
+
+  @Test
+  public void getTableauPossibleTest(){
+    GrilleImpl grille = new GrilleImpl(9);
+    char[] test = grille.getTableauPossible();
+    Assertions.assertEquals(test, grille.getTableauPossible());
+  }
+
+  @Test void initTest(){
+    try {
+      GrilleImpl grille = new GrilleImpl(9);
+      grille.initialisation(0, 0, '@');
+      Assertions.assertEquals('@', grille.getValue(0, 0));
+    }catch (HorsBornesException e){
+      e.getMessage();
+    }
   }
 }
