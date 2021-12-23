@@ -317,14 +317,14 @@ public class GrilleImpl implements Grille {
   @Override
   public boolean complete() {
     boolean isComplete = true;
-      for (int i = 0; i < grille.length; i++) {
-        for (int j = 0; j < grille[i].length; j++) {
-          if (grille[i][j] == EMPTY) {
-            isComplete = false;
-            break;
-          }
+    for (int i = 0; i < grille.length; i++) {
+      for (int j = 0; j < grille[i].length; j++) {
+        if (grille[i][j] == EMPTY) {
+          isComplete = false;
+          break;
         }
       }
+    }
     return isComplete;
   }
 
