@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Resolveur.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Activite3</a> &gt; <a href="index.source.html" class="el_package">nc.unc.kevintrochon</a> &gt; <span class="el_source">Resolveur.java</span></div><h1>Resolveur.java</h1><pre class="source lang-java linenums">package nc.unc.kevintrochon;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Class de résolution de sudoku.
+ */
+public class Resolveur implements ResolveurInterface {
+
+  /**
+   * Grille à complèter.
+   */
+  protected GrilleImpl grille;
+  /**
+   * Liste de caratère permis.
+   */
+<span class="fc" id="L19">  protected List&lt;Character&gt; charsPossible = new ArrayList&lt;&gt;();</span>
+
+  /**
+   * Constructeur à partir d'un fichier.
+   */
+<span class="fc" id="L24">  public Resolveur(final String file)throws IOException {</span>
+<span class="fc" id="L25">    grille = new GrilleImpl(file);</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">    for (final char c : grille.getTableauPossible()</span>
+         ) {
+<span class="fc" id="L28">      charsPossible.add(c);</span>
+    }
+<span class="fc" id="L30">    GrilleParser.parseur(file, this.grille);</span>
+<span class="fc" id="L31">  }</span>
+
+  /**
+   * Résolution de grille de sudoku.
+   */
+  @Override
+  public boolean solveur(final int position) {
+    try {
+<span class="fc bfc" id="L39" title="All 2 branches covered.">      if (position == grille.getDimension() * grille.getDimension()) {</span>
+<span class="fc" id="L40">        return true;</span>
+      }
+<span class="fc" id="L42">      final int ligne = position / grille.getDimension();</span>
+<span class="fc" id="L43">      final int colonne = position % grille.getDimension();</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">      if (grille.getValue(ligne, colonne) != GrilleImpl.EMPTY) {</span>
+<span class="fc" id="L45">        return solveur(position + 1);</span>
+      }
+<span class="fc bfc" id="L47" title="All 2 branches covered.">      for (final char c : charsPossible) {</span>
+<span class="fc bfc" id="L48" title="All 4 branches covered.">        if (grille.verifLigne(ligne, c) &amp;&amp; grille.verifColonne(colonne, c)</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            &amp;&amp; grille.verifRegion(ligne, colonne, c)) {</span>
+<span class="fc" id="L50">          grille.initialisation(ligne, colonne, c);</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">          if (solveur(position + 1)) {</span>
+<span class="fc" id="L52">            return true;</span>
+          }
+        }
+<span class="fc" id="L55">      }</span>
+<span class="fc" id="L56">      grille.initialisation(ligne, colonne, GrilleImpl.EMPTY);</span>
+<span class="fc" id="L57">      return false;</span>
+<span class="fc" id="L58">    } catch (HorsBornesException | CaractereInterditException exception) {</span>
+<span class="fc" id="L59">      return false;</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
